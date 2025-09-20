@@ -2,82 +2,42 @@
 Diberikan sebuah function cariModus(arr) yang menerima sebuah array angka. Function akan me-return modus dari array atau deret angka tersebut. Modus adalah angka dari sebuah deret yang paling banyak atau paling sering muncul. Contoh, modus dari [10, 4, 5, 2, 4] adalah 4. Jika modus tidak ditemukan, function akan me-return -1. Apabila ditemukan lebih dari dua nilai modus, tampilkan nilai modus yang paling pertama muncul (dihitung dari kiri ke kanan). Dan apabila dialam modus hanya ada 1 nilai yang sama maka function akan me-return -1, Contohnya [1, 1, 1] adalah -1.
 */
 function cariModus(arr) {
-  //
-  //
-  //
-  //
-  //
-  // { START }
-  // validasi apakah semua nilai dalam array sama, jika iya maka kembalikan -1
-  let semua_sama = true;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] !== arr[0]) semua_sama = false;
-  }
-  if (semua_sama) return -1;
-  // validasi apakah semua nilai dalam array sama, jika iya maka kembalikan -1
-  // { END }
-  //
-  //
-  //
-  //
-  //
-  
+  // you can only write your code here!
   let kumpulan_angka = {};
+  let n_max = 1;
+  let modus = null;
 
-  //
-  //
-  //
-  //
-  //
-  // { START }
-  // validasi apakah ada modus didalam array, jika tidak ada maka kembalikan -1, sekalian cari  
-  // modus-nya dengan cara mengelompokkan setiap angka yang ditemukan kedalam objek kumpulan angka
-  let tidak_ada_modus = true;
-  for (let g = 0; g < arr.length; g++) {
-    if (kumpulan_angka[arr[g]] === 1 && tidak_ada_modus) tidak_ada_modus = false;
-    
-    let modus_pertama = false;
-
-    if (kumpulan_angka[arr[g]] === 1) {
-        // jika belum ada modus di kumpulan angka maka tetapkan angka sekarang sebagai 
-        // modus pertama dengan menjumlahkan value angka sekarang dengan 0.5 agar
-        // jadi satu-satunya angka dengan value ber-koma
-        for (const key in kumpulan_angka) {
-            if (!(kumpulan_angka[key] > 1)) modus_pertama = true;
-        }
-        
-        kumpulan_angka[arr[g]] += (modus_pertama ? 0.5 : 1);
-        continue;
-    }
-    kumpulan_angka[arr[g]] = 1;
-
+  // kelompokkan angka kedalam objek kumpulan angka
+  for (n of arr) {
+    kumpulan_angka[n] = (kumpulan_angka[n] || 0) + 1;
+    if (n_max < kumpulan_angka[n]) {
+        n_max = kumpulan_angka[n];
+    } 
   }
-  if (tidak_ada_modus) return -1;
-  // { END }
-  //
-  //
-  //
-  //
-  //
-  
-  //
-  //
-  //
-  //
-  //
-  // { START }
-  // return angka modus pertama yang value-nya ber-koma tadi
+
+  // jika kumpulan angka kurang dari 2 maka return -1
+  // kemungkinan karena angka dalam array sama semua atau tidak ada angka sama sekali
+  if (Object.keys(kumpulan_angka).length < 2) return -1;
+
+  // jika n max masih 1 berarti tidak ada modus yang ditemukan dalam array
+  if (n_max === 1) return -1;
+
+  // filter kumpulan angka agar hanya tersisa kumpulan angka modus saja
   for (const key in kumpulan_angka) {
-    if ((kumpulan_angka[key] > 1) && (kumpulan_angka[key] < 2)) {
-        return +key;
+   if (kumpulan_angka[key] < n_max) delete kumpulan_angka[key];
+  }
+  
+  // dari kumpulan angka modus itu tentukan modus yang pertama kali ditemukan dalam array
+  for (const n of arr) {
+    for (const key in kumpulan_angka) {
+        if (+key === n) {
+            modus = n;
+            break;
+        }
     }
-  } 
-  // { END }
-  //
-  //
-  //
-  //
-  //
+  }
+  
+  return modus;
 }
 
 // TEST CASES
