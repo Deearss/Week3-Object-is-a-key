@@ -18,6 +18,38 @@ function countProfit(shoppers) {
                    ];
 
   // you can only write your code here!
+  if (shoppers.length < 1) return [];
+
+  let result = [];
+  
+  for (let i = 0; i < listBarang.length; i++) {
+    const nama_barang = listBarang[i][0];
+    const harga_barang = listBarang[i][1];
+    const stok_barang = listBarang[i][2];
+    
+    const sales = {
+      product: nama_barang,
+      shoppers: [],
+      letfOver: stok_barang,
+      totalProfit: 0
+    };
+
+    shoppers.forEach((shopper = {name: "", product: "", amount: 0}) => {
+      if (shopper.product === nama_barang) {
+        // jika stok barang kurang dari jumlah barang yang ingin dibeli pembeli
+        // maka skip pembeli tersebut dan lanjut ke pembeli selanjutnya
+        if (sales.letfOver < shopper.amount) return;
+        
+        sales.shoppers.push(shopper.name);
+        sales.letfOver -= shopper.amount;
+        sales.totalProfit += harga_barang * shopper.amount;
+      }
+    });
+    
+    result.push(sales);
+  }
+
+  return result;
 }
 
 // TEST CASES
